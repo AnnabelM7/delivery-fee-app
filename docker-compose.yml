@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  delivery-app:
+    build: .
+    container_name: delivery-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:h2:file:/app/data/deliverydb
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    volumes:
+      - delivery_data:/app/data
+
+volumes:
+  delivery_data:
