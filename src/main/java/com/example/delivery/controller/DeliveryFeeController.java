@@ -19,8 +19,18 @@ import java.util.Map;
 @RequestMapping("/api/delivery-fee")
 @RequiredArgsConstructor
 public class DeliveryFeeController {
+
     private final DeliveryFeeService deliveryFeeService;
 
+    /**
+     * Calculates the delivery fee for a given city and vehicle type.
+     * If datetime is provided, calculation is based on weather data valid at that time.
+     *
+     * @param city        the delivery city (TALLINN, TARTU, PARNU)
+     * @param vehicleType the vehicle type (CAR, SCOOTER, BIKE)
+     * @param datetime    optional timestamp for historical fee calculation (format: yyyy-MM-ddTHH:mm:ss)
+     * @return total delivery fee in euros, or error message if vehicle type is forbidden
+     */
     @GetMapping
     public ResponseEntity<Map<String, Object>> getDeliveryFee(
             @RequestParam City city,

@@ -11,18 +11,27 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * Handles ForbiddenVehicleException and returns 422 Unprocessable Entity.
+     */
     @ExceptionHandler(ForbiddenVehicleException.class)
     public ResponseEntity<Map<String, Object>> handleForbidden(ForbiddenVehicleException ex) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .body(errorBody(ex.getMessage()));
     }
 
+    /**
+     * Handles ResourceNotFoundException and returns 404 Not Found.
+     */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(errorBody(ex.getMessage()));
     }
 
+    /**
+     * Handles IllegalArgumentException and returns 400 Bad Request.
+     */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, Object>> handleBadRequest(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

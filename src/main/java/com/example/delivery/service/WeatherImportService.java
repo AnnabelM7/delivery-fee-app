@@ -36,6 +36,11 @@ public class WeatherImportService {
 
     private final WeatherRepository weatherRepository;
 
+    /**
+     * Scheduled job that fetches weather data from the Estonian Environment Agency
+     * and stores observations for tracked stations into the database.
+     * Runs according to the cron expression configured in 'weather.import.cron'.
+     */
     @Scheduled(cron = "${weather.import.cron}")
     public void importWeatherData() {
         log.info("Starting weather data import at {}", LocalDateTime.now());
@@ -99,6 +104,10 @@ public class WeatherImportService {
         }
     }
 
+    /**
+     * Triggers weather data import on application startup
+     * to ensure data is available immediately after launch.
+     */
     @EventListener(ApplicationReadyEvent.class)
     public void importOnStartup() {
         log.info("Triggering initial weather import on startup...");

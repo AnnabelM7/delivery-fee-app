@@ -9,5 +9,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BaseFeeRepository extends JpaRepository<BaseFee, UUID> {
+    /**
+     * Returns the base fee for a given city and vehicle type.
+     *
+     * @param city        the delivery city
+     * @param vehicleType the vehicle type
+     * @return the matching BaseFee entry, or empty if none found
+     */
     Optional<BaseFee> findByCityAndVehicleType(City city, VehicleType vehicleType);
 }
