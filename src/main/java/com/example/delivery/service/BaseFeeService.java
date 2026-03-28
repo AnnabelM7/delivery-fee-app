@@ -23,7 +23,7 @@ public class BaseFeeService {
 
     public BaseFee getBaseFeeById(UUID id) {
         return baseFeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Base fee not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Base fee not found with id=" + id));
     }
 
     public BaseFee createBaseFee(BaseFee baseFee) {
