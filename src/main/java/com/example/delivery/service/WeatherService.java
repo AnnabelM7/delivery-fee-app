@@ -5,6 +5,7 @@ import com.example.delivery.exception.ResourceNotFoundException;
 import com.example.delivery.repository.WeatherRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,8 +27,17 @@ public class WeatherService {
                 .orElseThrow(() -> new ResourceNotFoundException("Weather not found with id=" + id));
     }
 
-    public Weather getLatestWeatherByStationName(String stationName) {
+    public Weather getLatestWeather(String stationName) {
         return weatherRepository.findFirstByStationNameOrderByObservationTimestampDesc(stationName)
                 .orElseThrow(() -> new ResourceNotFoundException("No weather data found for station: " + stationName));
+    }
+
+    public Weather getWeatherForTime(String stationName, LocalDateTime time) {
+        return weatherRepository
+                .findTopByStationNameAndObservationTimestampLessThanEqualOrderByObservationTimestampDesc(
+                        stationName, time)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "No weather data found for station " + stationName + " at " + time
+                ));
     }
 }

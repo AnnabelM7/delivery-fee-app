@@ -7,6 +7,7 @@ import com.example.delivery.enums.VehicleType;
 import com.example.delivery.exception.ForbiddenVehicleException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -26,10 +27,16 @@ public class DeliveryFeeService {
         this.baseFeeService = baseFeeService;
     }
 
-    public double calculateFee(City city, VehicleType vehicleType) {
+    public double calculateFee(City city, VehicleType vehicleType, LocalDateTime time) {
         String stationName = CITY_TO_STATION.get(city);
 
-        Weather weather = weatherService.getLatestWeatherByStationName(stationName);
+        Weather weather;
+
+        if (time == null) {
+            weather = weatherService.getLatestWeather(stationName);
+        } else {
+            weather = weatherService.getWeatherForTime(stationName, time);
+        }
         BaseFee baseFee = baseFeeService.getBaseFeeByCityAndVehicleType(city, vehicleType);
 
         double fee = baseFee.getFee();
