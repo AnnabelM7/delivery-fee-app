@@ -24,6 +24,7 @@ public class DeliveryFeeService {
 
     private final WeatherService weatherService;
     private final BaseFeeService baseFeeService;
+    private final ExtraFeeService extraFeeService;
 
     /**
      * Calculates the total delivery fee for a given city and vehicle type
@@ -50,43 +51,11 @@ public class DeliveryFeeService {
         BaseFee baseFee = baseFeeService.getBaseFeeByCityAndVehicleType(city, vehicleType);
 
         double fee = baseFee.getFee();
-        fee += getAirTemperatureExtraFee(weather.getAirTemperature(), vehicleType);
-        fee += getWindSpeedExtraFee(weather.getWindSpeed(), vehicleType);
-        fee += getWeatherPhenomenonExtraFee(weather.getWeatherPhenomenon(), vehicleType);
+        fee += extraFeeService.calculateAirTemperatureExtraFee(weather.getAirTemperature(), vehicleType);
+        fee += extraFeeService.calculateWindSpeedExtraFee(weather.getWindSpeed(), vehicleType);
+        fee += extraFeeService.calculateWeatherPhenomenonExtraFee(weather.getWeatherPhenomenon(), vehicleType);
 
         return fee;
     }
 
-    private double getAirTemperatureExtraFee(Double temperature, VehicleType vehicleType) {
-        if (temperature == null) return 0.0;
-        if (vehicleType != VehicleType.SCOOTER && vehicleType != VehicleType.BIKE) return 0.0;
-
-        if (temperature < -10.0) return 1.0;
-        if (temperature <= 0.0) return 0.5;
-        return 0.0;
-    }
-
-    private double getWindSpeedExtraFee(Double windSpeed, VehicleType vehicleType) {
-        if (windSpeed == null) return 0.0;
-        if (vehicleType != VehicleType.BIKE) return 0.0;
-
-        if (windSpeed > 20.0) throw new ForbiddenVehicleException();
-        if (windSpeed >= 10.0) return 0.5;
-        return 0.0;
-    }
-
-    private double getWeatherPhenomenonExtraFee(String phenomenon, VehicleType vehicleType) {
-        if (phenomenon == null || phenomenon.isBlank()) return 0.0;
-        if (vehicleType != VehicleType.SCOOTER && vehicleType != VehicleType.BIKE) return 0.0;
-
-        String p = phenomenon.toLowerCase();
-
-        if (p.contains("glaze") || p.contains("hail") || p.contains("thunder")) {
-            throw new ForbiddenVehicleException();
-        }
-        if (p.contains("snow") || p.contains("sleet")) return 1.0;
-        if (p.contains("rain")) return 0.5;
-
-        return 0.0;
-    }
 }

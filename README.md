@@ -43,12 +43,15 @@ src/
 │   │   ├── controller/         # REST controllers
 │   │   │   ├── BaseFeeController.java
 │   │   │   ├── DeliveryFeeController.java
+│   │   │   ├── ExtraFeeController.java
 │   │   │   └── WeatherController.java
 │   │   ├── entity/             # JPA entities
 │   │   │   ├── BaseFee.java
+│   │   │   ├── ExtraFee.java
 │   │   │   └── Weather.java
 │   │   ├── enums/              # Enums
 │   │   │   ├── City.java
+│   │   │   ├── FeeType.java  
 │   │   │   └── VehicleType.java
 │   │   ├── exception/          # Custom exceptions
 │   │   │   ├── ForbiddenVehicleException.java
@@ -56,10 +59,12 @@ src/
 │   │   │   └── ResourceNotFoundException.java
 │   │   ├── repository/         # JPA repositories
 │   │   │   ├── BaseFeeRepository.java
+│   │   │   ├── ExtraFeeRepository.java
 │   │   │   └── WeatherRepository.java
 │   │   └── service/            # Business logic
 │   │       ├── BaseFeeService.java
 │   │       ├── DeliveryFeeService.java
+│   │       ├── ExtraFeeService.java
 │   │       ├── WeatherImportService.java
 │   │       └── WeatherService.java
 │   └── resources/
@@ -142,6 +147,28 @@ GET /api/delivery-fee?city=PARNU&vehicleType=BIKE&datetime=2026-03-28T12:09:03
 |--------|---------------------|------------------------------|
 | GET    | `/api/weather`      | Get all weather observations |
 | GET    | `/api/weather/{id}` | Get observation by ID        |
+
+
+### Extra Fee Rules CRUD
+
+| Method | Endpoint               | Description                |
+|--------|------------------------|----------------------------|
+| GET    | `/api/extra-fees`      | Get all extra fee rules    |
+| GET    | `/api/extra-fees/{id}` | Get extra fee rule by ID   |
+| POST   | `/api/extra-fees`      | Create new extra fee rule  |
+| PUT    | `/api/extra-fees/{id}` | Update extra fee rule      |
+| DELETE | `/api/extra-fees/{id}` | Delete extra fee rule      |
+
+**POST/PUT request body:**
+```json
+{
+  "feeType": "WPEF",
+  "vehicleType": "BIKE",
+  "phenomenon": "rain",
+  "fee": 0.5,
+  "forbidden": false
+}
+```
 
 ---
 
